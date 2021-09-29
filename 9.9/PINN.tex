@@ -1,0 +1,122 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}
+
+
+\title{Physics Informed Deep Learning}
+\author{Yikai Wang}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Problem Setup}
+Consider parametrized and nonlinear partial differential equations of the general form
+\[u_t+\mathcal{N}[u;\lambda] = 0\]
+where $u(t,x)$ denotes the latent(hidden) solution and $\mathcal{N}[\cdot;\lambda]$ is a nonlinear operator parametrized by $\lambda$.
+\subsection{Continuous Time Models}
+Define $f(t,x)$ to be given by the left-hand-side of equation; ie.,
+\begin{equation}
+f:=u_t+\mathcal{N}[u],
+\end{equation}
+
+and proceed by approximating $u(t,x)$ by a deep neural network.
+
+\subsubsection{Example$(Burger's \ Equation)$}
+\begin{equation}
+\begin{array}{l}
+u_t+uu_x-(0.01)/\pi)u_{xx}=0, x\in[-1,1], t\in[0,1] \\
+u(0,x) = -sin(\pi x), \\
+u(t,-1) = u(t,1) = 0.
+\end{array}
+\end{equation}
+Let us define $f(t,x)$ to be given by
+\begin{equation}
+f:=u_t + uu_x - (0.01/\pi)u_{xx}
+\end{equation}
+The shared parameters between the neural networks $u(t,x)$ and $f(t,x)$ can be learned by minimizing the mean square error loss
+\begin{equation}
+MSE = MSE_u + MSE_f
+\end{equation}
+where 
+\[MSE_u = \frac{1}{N_u}\sum_{i=1}^{N_u}|u(t_{u}^{i},x_{u}^{i})-u^{i}|^{2}\]
+and 
+\[MSE_f = \frac{1}{N_f}\sum_{i=1}^{N_f}|f(t_{f}^{i},x_{f}^{i}|^{2}\]
+Here $\lbrace t_{u}^{i},x_{u}^{i},u^{i} \rbrace_{i=1}^{N_u}$ denote the initial and boundary training data on $u(t,x)$ and $\lbrace t_{f}^{i}, x_{f}^{i} \rbrace_{i=1}^{N_f}$ specify the collections points for $f(t,x)$.
+
+\subsubsection{Example$(Shr\ddot{o}dinger \ Equation)$}
+The nonlinear Schr$\ddot{o}$dinger equation along with periodic boundary conditions is given by
+\begin{equation}
+\begin{array}{l}
+ih_t+0.5h_{xx}+|h|^{2}h=0, x\in [-5,5], t\in[0,\pi/2] \\
+h(0,x) = 2sech(x),\\
+h(t,-5) = h(t,5), \\
+h_x(t,-5) = h_x(t,5),
+\end{array}
+\end{equation}
+Where $h(t,x)$ is the complex-valued solution. Define $f(t,x)$ to be given by
+\[f:=ih_t+0.6h_{xx}+|h|^{2}h\]
+and proceed by placing a complex-valued nerual network prior on $h(t,x)$. In fact, if $u$ denotes the real part of $h$ and $v$ is the imaginary part, we are placing a muti-out neural network prior on $h(t,x) = [u(t,x) \ v(t,x)]$. The shared parameters of the neural networks $h(t,x)$ and $f(t,x)$ can be learned by minimizing the mean square error loss
+\begin{equation}
+MSE = MSE_0+MSE_b+MSE_f
+\end{equation}
+where 
+\[MSE_0 = \frac{1}{N_0}\sum_{i=1}^{N_0}|h(0,x_{0}^{i})-h_{0}^{i}|^{2} \]
+\[MSE_b = \frac{1}{N_b}\sum_{i=1}^{N_b}|h^{i}(t_{b}^{i},-5)-h^{i}(t_{b}^{i},5)|^{2}+|h_{x}^{i}(t_{b}^{i},-5)-h_{x}^{i}(t_{b}^{i},5)|^{2})\],
+and
+\[MSE_f = \frac{1}{N_f}\sum_{i=1}^{N_f}|f(t_{f}^{i},x_{f}^{i})|^2\]
+Here $\lbrace x_{0}^{i}, h_{0}^{i} \rbrace _{i=0}^{N_0}$ denotes the initial data, $\lbrace t_{b}^{i} \rbrace_{i=1}^{N_b}$ corresponds to the collocation points on the boundary, $\lbrace t_{f}^{i},x_{f}^{i} \rbrace$ represents the collocation points on $f(t,x)$. Consequently, $MSE_0$ corresponds to the loss on the initial data, $MSE_b$ enforces the periodic boundary conditions, and $MSE_f$ penalizes the  Schr$\ddot{o}$dinger equation not being satisfied on the collocation points.
+\subsection{Discrete Time Models}
+Apply the general form of Runge-Kutta methods with q stages to equation(1) and obtain
+\begin{equation}
+\begin{array}{l}
+u^{n+c_i} = u^{n}-\Delta t\sum_{j=1}^{q}a_{ij}\mathcal{N}[u^{n+c_j}], i=1,\ldots,q, \\
+u^{n+1} = u^{n}-\Delta t\sum_{j=1}^{q}b_{j}\mathcal{N}[u^{n+c_j}].
+\end{array}
+\end{equation}
+Here, $u^{n+c_j}(x) = u(t^{n}+c_{j}\Delta t, x)$ for $j=1,\ldots,q$. Equations (7) can be equivalently expressed as
+\begin{equation}
+\begin{array}{l}
+u^n = u_{i}^{n}, i=1,\ldots,q, \\
+\\
+u^n = u_{q+1}^{n},
+\end{array}
+\end{equation}
+where
+\begin{equation}
+\begin{array}{l}
+u_{i}^{n}:= u^{n+c_i}+\Delta t\sum_{j=1}^{q}a_{ij}\mathcal{N}[u^{n+c_j}],i=1,\ldots,q, \\
+\\
+u_{q+1}^{n}:=u^{n+1}+\Delta t\sum_{j=1}^{q}b_j\mathcal{N}[u^{n+c_j}]
+\end{array}
+\end{equation}
+Then they proceed by placing a muti-output neural network prior on 
+\begin{equation}
+[u^{n+c_1}(x),\ldots,u^{n+c_q}(x),u^{n+1}(x)].
+\end{equation}
+This prior assumption along with equations (9) result in a neural network that takes $x$ as input and outputs
+\begin{equation}
+[u_{1}^{n}(x),\ldots,u_{q}^{n}(x),u_{q+1}^{n}(x)].
+\end{equation}
+\subsubsection{Example$(Burgers'\ Equation)$}
+The nonlinear operator in equation (9) is given by
+\[ \mathcal{N}[u^{n+c_j}] = u^{n+c_j}u_{x}^{n+c_j}-(0.01/\pi)u_{xx}^{n+c_j} \]
+The shared parameters of the neural networks (10) and (11) can be learned by miniming the sum of squared errors
+\begin{equation}
+SSE = SSE_n + SSE_b
+\end{equation}
+where
+\[ SSE_n = \sum_{j=1}^{q}\sum_{i=1}^{N_n}|u_{j}^{n}(x^{n,i})-u^{n,i}|^2 \]
+and 
+\[ SSE_b = \sum_{i=1}^{q}(|u^{n+c_i}(-1)|^2+|u^{n+c_i}(1)|^2)+|u^{n+1}(-1)|^2+|u^{n+1}(1)|^2 \].
+Here, $\lbrace x^{n,i},u^{n,i}\rbrace_{i=1}^{N_n}$ corresponds to the data at time $t^{n}$.
+
+
+\section{Question}
+\begin{enumerate}
+\item How to divide train dataset and test dataset?
+\end{enumerate}
+
+
+\end{document}

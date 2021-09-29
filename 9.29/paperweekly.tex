@@ -1,0 +1,58 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{diagbox}
+\geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}
+
+
+\title{Experiment Results}
+\author{Yikai Wang}
+\date{\today}
+
+\begin{document}
+\maketitle
+\section{Result}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{result1.pdf}
+\includegraphics[scale=0.5]{result2.pdf}
+\caption{Burgers'equation: Top:Predicted solution $u(t,x)$ along with initial and boundary training data. We are using 10,000 collocation points. Bottom:Comparison of the predicted and exact solutions corresponding to the three temporal snapshots depicted by the white vertical lines. The relative $\mathbf{L}_2$ error of this case is 2.59e-03.}
+\end{figure}
+
+\section{Training Error}
+$N_u = 200, N_f = 10000$
+\begin{figure}[h]
+\centering
+\includegraphics[scale=1]{error_compare.pdf}
+\end{figure}
+\section{Test error}
+The architecture is fixed to 9 layers with 20 neurons per hidden layer.
+\begin{table}[h]
+\centering
+\begin{tabular}{c|ccccc}
+\hline
+\diagbox{$N_u$} {$N_f$} & 2000 & 4000 & 6000 & 8000 & 10000 \\
+\hline
+100 & 7.8e-02 & 5.21e-02 & 5.73e-03 & 1.81e-03 & 5.03e-03\\
+\hline
+200 & 2.7e-01 & 3.85e-03 & 9.77e-04 & 1.13e-03 & 2.59e-03\\
+\end{tabular}
+\caption{Pytorch}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c|ccccc}
+\hline
+\diagbox{$N_u$}{$N_f$} & 2000 & 4000 & 6000 & 8000 & 10000 \\
+\hline
+100 & 6.6e-02 & 2.7e-01 & 7.2e-03 & 2.2e-03 & 1.22e-03\\
+\hline
+200 & 1.8e-01 & 2.3e-03 & 8.2e-04 & 6.1e-04 & 5.27e-04\\
+\hline
+\end{tabular}
+\caption{Tensorflow}
+\end{table}
+\end{document}
