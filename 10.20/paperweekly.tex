@@ -1,0 +1,43 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{diagbox}
+\geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}
+
+
+\title{Experiment Results}
+\author{Yikai Wang}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Result-Pytorch}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{result.pdf}
+\includegraphics[scale=0.5]{result2.pdf}
+\includegraphics[scale=0.5]{result3.pdf}
+\caption{Burgers'equation: Top: Solution $u(t,x)$ along with the location of initial training snapshot at $t=0.1$ and the final prediction snapshot at $t=0.9$. Bottom:Initial traing data and final prediction at the snapshots by the white vertical lines in the top pannel.}
+\end{figure}
+
+\section{Result-Tensorflow}
+\begin{figure}[h]
+\centering
+%\includegraphics[scale=1.2]{Burgers.pdf}
+\end{figure}
+
+\section{Training Error}
+\begin{figure}[h]
+\centering
+%\includegraphics[scale=0.7]{error_tensorflow.pdf}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.7]{training_error_pytorch.pdf}
+\end{figure}
+
+\end{document}
