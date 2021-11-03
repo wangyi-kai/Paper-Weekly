@@ -1,0 +1,39 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{diagbox}
+\geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}
+
+
+\title{Theory-guided hard constraint projection(HCP): A knowledge-based data-friven scientific machine learning}
+\author{Yikai Wang}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Problem}
+In this study, the problem of subsurface flow in the field of fluid mechanics is taken as an example.
+\[ Ss\frac{\partial h}{\partial t} = \frac{\partial}{\partial x}(K(x,y)\frac{\partial h}{\partial x})+\frac{\partial h}{\partial y}(K(x,y)\frac{\partial h}{\partial y}) \]
+where $Ss$ denotes the specific storage; $K(x,y)$ denotes the hydraulic conductivity field; and $h$ denotes the hydraulic head.
+
+\section{Hard constraint modeling process}
+\subsection{Equation discretization and matrix decomposition}
+\[0 = \frac{Ss}{\Delta t}h^{t-\Delta t}+(-\frac{Ss}{\Delta t}+\frac{-(K_{x+\Delta x/2} + K_{x-\Delta x/2})}{\Delta x^{2}} +\frac{-(K_{y+\Delta y/2}+K_{y-\Delta y}}{\Delta y^{2}})h^{t} + \frac{K_{x-\Delta x/2}}{\Delta x^{2}}h_{x-\Delta x}^{t}\] 
+\[+ \frac{K_{x+\Delta x/2}}{\Delta x^{2}}h_{x+\Delta x}^{t} + \frac{K_{y-\Delta y/2}}{\Delta y^{2}}h_{y-\Delta y}^{t} + \frac{K_{y+\Delta y/2}}{\Delta y^{2}}h_{y+\Delta y}^{t} \]
+\[CP = \lbrace (x,y,t-\Delta t),(x,y,t),(x-\Delta x,y,t),(x+\Delta x, y, t),(x,y-\Delta y, t),(x,y+\Delta y, t) \rbrace \]
+The constraint matrix is essentially the hyperplane constrained by the discretized equation in the variable space, reflecting the relationship determined by the physical mechanism at different positions in the constraint patch.
+%\[H = [
+%h^{t - \Delta t} & h^{t} & h_{x-\Delta x}^{t} & h_{x-\Delta x}^{t} & h_{y-\Delta y}^{t} & h_{y+\Delta y}^{t}
+%]  \]
+\[A = [\frac{Ss}{\Delta t}, a_2, \frac{K_{x-\Delta x/2}}{\Delta x^{2}}, \frac{K_{x+\Delta x/2}}{\Delta x^{2}}, \frac{K_{y-\Delta y/2}}{\Delta y^{2}}, \frac{K_{y+\Delta y/2}}{\Delta y^{2}}] \]
+\[a_2 = -\frac{Ss}{\Delta t}+\frac{-(K_{x+\Delta x/2} + K_{x-\Delta x/2})}{\Delta x^{2}} +\frac{-(K_{y+\Delta y/2}+K_{y-\Delta y}}{\Delta y^{2}} \]
+Where $H$ is the prediction matrix in the constraint path; and $A$ is the constriant matrix that denotes the physical constraints.
+
+\subsection{Hard constraint projection(HCP)}
+The adjusted prediction matrix is obtained as follows:
+\[H^{*} = PH = (I - A^{T}(AA^{T})^{-1}A)H, \  AH^{*}=0 \]
+where $H^{*}$ denotes the projected prediction matrix, and $P$ denotes the projection matrix.
+\end{document}
