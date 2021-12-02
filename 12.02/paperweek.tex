@@ -1,0 +1,69 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{diagbox}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma} 
+\geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}
+
+\title{Learning in Modal Space: Solving Time-Dependent Stochastic PDEs Using Physics-Informed Neural Networks}
+\author{Yikai Wang}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Problem Setup}
+We consider the following time-dependent SPDE:
+\begin{equation}
+\frac{\partial u}{\partial t} = \mathcal{N}_x[u(x,t;\omega)], \quad x\in D, t\in [0,T], \omega \in \Omega
+\end{equation}
+with initial and boundary conditons
+\begin{equation}
+u(x,t_0;\omega) = u_{0}(x;\omega)
+\end{equation}
+\begin{equation}
+\mathcal{B}_x[u(x,t;\omega)]=h(x,t;\omega)
+\end{equation}
+
+\section{An overview of the Dynamically Orthogonal decomposition methods}
+For a random field $u(x,t;\omega)$ that evoles in time, the generalized KL expansion at a given time $t$ is
+\[ u(x,t;\omega)=\bar{u}(x,t)+\sum_{i=0}^{\infty}\sqrt{\lambda_i}\phi_{i}(x,t)\xi_{i}(t;\omega) \]
+
+\[\int_{D}C_{u(x_1,t)u(x_2,t)}\phi_{i}(x_2,t)dx_2 = \lambda_{i}\phi_{i}(x_1,t)  \]
+\[C_{u(x_1,t)u(x_2,t)}=\mathbf{E}[(u(x_1,t;\omega)-\bar{u}(x_1,t))(u(x_2,t;\omega)-\bar{u}(x_2,t))]   \]
+Next, we consider a generalized expansion
+\[ u(x,t;\omega)=\bar{u}(x,t)+\sum_{i=1}^{\infty}u_{i}(x,t)Y_{i}(t;\omega), \quad \omega \in \Omega  \]
+\[ \bar{u}(x,t)=\mathbf{E}[u(x,t;\omega)]=\int_{\Omega}u(x,t;\omega)dP(\omega)  \]
+\[\langle u_i,u_j \rangle = 0 \quad  i\neq j\]
+\[ E[Y_i] = 0 \]
+We define the linear subspace $V_S = span\lbrace u_{i}(x,t)\rbrace_{i=1}^{N}$.
+\subsection{Dynamically orthogonal representation}
+A natural constraint to overcome redundancy is that the evolution of bases be orthogonal to the space $V_S$, this can be expressed through the following DO condition:
+\[ \frac{dV_S}{dt} \bot V_S \Longleftrightarrow \langle \frac{\partial u_{i}(x,t)}{\partial t}, u_{j}(x,t) \rangle = 0 \quad i,j = 1,\ldots, N  \]
+here $\langle u(x,t), v(x,t) \rangle = \int_{D}u(x,t)v(x,t)dx$. The DO condition preserves the orthonormality and the length of the bases $\lbrace u_i(x,t) \rbrace_{i=1}^{N}$ since
+\[ \frac{\partial}{\partial t} \langle u_{i}(\cdot,t),u_{j}(\cdot, t) \rangle = \langle \frac{\partial u_{i}(\cdot, t)}{\partial t}, u_{j}(\cdot, t) \rangle  + \langle u_{i}(\cdot, t), \frac{\partial u_{j}(\cdot, t)}{\partial t} \rangle = 0 \quad i,j=1,\ldots,N\] 
+
+\begin{theorem}
+\[ \frac{\bar{u}(x,t)}{\partial t} = \mathbf{E}[\mathcal{N}_x[u(\cdot, t;\omega)] \]
+
+\[\frac{dY_{i}(t;\omega)}{dt} = \langle \mathcal{N}_{x}[u(\cdot,t;\omega)] - \mathbf{E}[\mathcal{N}_{x}[u(\cdot,t;\omega)]], u_{i}(\cdot, t) \rangle \]
+
+\[ \sum_{i=1}^{N}C_{Y_{i}(t)Y_{j}(t)} \frac{\partial u_{i}(x,t)}{\partial t} = \Pi_{V_{s}^{\bot}} \mathbf{E}[\mathcal{N}_x[u(\cdot,t;\omega)]Y_j ] \]
+\end{theorem}
+The projection in the orthogonal complement of the linear usbspace $V_S$ is defined as:
+\[ \Pi_{V_{s}^{\bot}} F(x)=F(x)-\Pi_{V_{s}^{\bot}}=F(x)-\sum_{k=1}^{N}\langle F(\cdot),u_{k}(\cdot,t)\rangle u_{k}(\cdot,t) \]
+The boundary conditions are :
+\[   \mathcal{B}_x[\bar{u}(x,t;\omega)] = \mathbf{E}[h(x,t;\omega)]  \]
+\[   \mathcal{B}_x[u_i(x,t)] = \mathbf{E}[Y_j(t;\omega)h(x,t;\omega)]C^{-1}_{Y_{i}(t)Y_{j}(t)}  \]
+The initial condition:
+\[  \bar{u}(x,t_0) = \mathbf{E}[u_0(x;\omega)]  \]
+\[  Y_i(t_0;\omega)=\langle u_{0}(\cdot,\omega)-\bar{u}(x,t_0), v_i(\cdot) \rangle  \]
+\[u_{i}(x,t_0)=v_i(x)  \]
+where $v_i(x)$ is the eigenfield of the standard KL expansion of $u_0(x;\omega)$.
+\[\int_{D} C_{u(\cdot,t_0)u(\cdot,t_0)}(x,y)v_i(x)dx=\lambda^{2} v_i(x)  \]
+
+\end{document}
