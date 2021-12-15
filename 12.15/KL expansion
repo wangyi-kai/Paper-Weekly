@@ -1,0 +1,20 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{diagbox}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma} 
+\geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}
+
+\title{Learning in Modal Space: Solving Time-Dependent Stochastic PDEs Using Physics-Informed Neural Networks}
+\author{Yikai Wang}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+
+\end{document}

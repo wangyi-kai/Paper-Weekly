@@ -1,0 +1,66 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{diagbox}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma} 
+\geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}
+
+\title{Learning in Modal Space: Solving Time-Dependent Stochastic PDEs Using Physics-Informed Neural Networks}
+\author{Yikai Wang}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Karhunen-Loeve Expansion }
+\subsection{Derivation}
+\[ u(x,\theta) = \sum_{i=0}^{\infty}\sqrt{\lambda_n}\xi(\theta)f_{n}(x)   \]
+$C(x_1,x_2)$ denotes the covariance function, by definition of the covariance function, it is bounded, symmertic and positive definite. Thus, it has the spectral decomposition:
+\[ C(x_1,x_2) = \sum_{n=0}^{\infty}\lambda_n f_n(x_1)f_n(x_2)  \]
+$\lambda_n$ and $f_n(x)$ are the solution of the integral equation
+\[ \int_{D}C(x_1,x_2)f_n(x)dx_1 = \lambda_n f_n(x_2) \]
+$u(x,\theta)$ can be written as
+\[ u(x,\theta) = \bar{u}(x) + \alpha(x,\theta) \] 
+where $\alpha(x,\theta)$ is a process with zero mean and covariance function $C(x_1,x_2)$, the process $alpha(x,\theta)$ can be expanded in terms of eigenfunctions $f_n(x)$ as:
+\[ \alpha(x,\theta) = \sum_{n=0}^{\infty}\xi(\theta)\sqrt{\lambda_n}f_{n}(x)  \]
+By multiplying equation by $f_n(x)$ and integrating over the domain D, that is:
+\[\xi(\theta) = \frac{1}{\lambda_n}\int_{D}\alpha(x,\theta)f_n(x)dx \]
+The covariance function is given by 
+\[ C(x_1,x_2) = e^{-|x_1 - x_2|/b}  \]
+where $b$ is a parameter with the same units as $x$ and is often termed the correlation length, since it reflects the rate at which the correlation decays between two points of the process.
+\[ \int_{-a}^{a}e^{-c|x_1 - x_2|} f(x_2)dx_2 = \lambda f(x_1) \]
+where $c=\frac{1}{b}$. Equation can be written as 
+\[\int_{-a}^{x}e^{-c(x_1 - x_2)}f(x_2)dx_2 + \int_{x}^{a}e^{c|x_1 - x_2|}f(x_2)dx_2 = \lambda f(x_1)  \]
+
+Differentiating equation with respect to $x$ and rearranging gives
+\[\lambda f'(x_1) = -c\int_{-a}^{x}e^{-c(x_1 - x_2)}f(x_2)dx_2 + c\int_{x}^{a}e^{c(x_1 - x_2)}f(x_2)dx_2 \]
+Differentiating once more with respect to $x_1$, the following equation is obtained 
+\[ \lambda f''(x) = (-2c + c^{2}\lambda)f(x)  \]
+Introducing the new variable 
+\[ \omega^2 = \frac{2c - c^{2}\lambda}{\lambda}\]
+then equation becomes
+\[ f''(x) + \omega^{2}f(x)=0 \quad x\in D            \] 
+To find the boundary conditions associated with the differential equation, equations are evaluated at $x=-a$ and $x=a$
+\[ cf(a)+f'(a) = 0  \]
+\[ cf(-a) - f'(-a) = 0\] 
+The solution is 
+\[f(x) = a_1 cos(\omega x) + a_2 sin(\omega x) \]
+Further, applying the boundary conditions
+\[a_1 (c - \omega tan(\omega a) + a_2 (\omega + ctan(\omega a)) = 0 \]
+\[ a_1 (c - \omega tan(\omega a) - a_2 (\omega + ctan(\omega a)) = 0 \]
+Setting this determinant equal to zero gives the following transcendental equations
+\[ c - \omega tan(\omega a) = 0\]
+\[ \omega + ctan(\omega a) = 0 \]
+Denoting the solution of the second of these equations by $\omega^{*}$, the resulting eigenfunctions are 
+\[f_n(x) = \frac{cos(\omega_n x)}{\sqrt{a + \frac{sin(2\omega_n a)}{2\omega_n}}}  \]
+and
+\[ f_n^{*}(x) = \frac{sin(\omega_n^{*} x)}{\sqrt{a - \frac{sin(2\omega_n^{*} a)}{2\omega_n^{*}}}}  \]
+for even $n$ and odd $n$ respectively. The corresponding eigenvalues are 
+\[ \lambda_n = \frac{2c}{\omega_n^{2} + c^{2}}  \]
+and
+\[ \lambda_n^{*} = \frac{2c}{\omega_{n}^{*2} + c^{2}} \]
+\end{document}
