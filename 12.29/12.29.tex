@@ -1,0 +1,45 @@
+\documentclass{article}
+
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{diagbox}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma} 
+\geometry{a4paper,left=2cm,right=2cm,top=1cm,bottom=1cm}
+
+\title{Stochastic Galerkin Method}
+\author{Yikai Wang}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{General Procedure}
+
+\subsection{Problem}
+\[ -\nabla\cdot(a(\omega,x)\nabla u(\omega,x))=f(\omega,x)  \ (\omega,x)\in \Omega \times D\]
+\[u(\omega,x)= 0 \ x \in \partial D\]
+\subsection{Tensor Product}
+\[ (f\otimes g)(x,y)=f(x)g(y) \]
+\[ ((A\otimes B)_{i_1 j_1})_{i_2 j_2} = A_{i_1 j_1}B_{i_2 j_2} \]
+\subsection{Solution}
+\[\mathbf{E}[\int_{D}a\nabla u \nabla v dx]=E[\int_{D}fvdx] \]
+\[v(x) = \sum_{i=1}^{N}V_i \phi_i(x) \]
+\[ \int_{D}a \nabla(\sum_{i=1}^{N}U_i \phi_i(x))\cdot \nabla \phi_jdx = \int_{D}f\phi_jdx \]
+\[\sum_{i=1}^{N}U_i \int_{D}a\nabla \phi_i \cdot \nabla \phi_j dx = \int_{D}f\phi_j dx \]
+\[KU = F\]
+\[a(\omega,x) = \bar{a}+\sum_{l=1}^{\infty}\varphi_l(x)y_l(\omega) \]
+\[u(\omega,x) = \sum_{n=1}^{Q}\sum_{i=1}^{N}(U_n)_{i}\psi_n(\omega)\phi_i(x) \]
+\[\mathbf{E}[\int_{D}a \nabla \sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i \psi_n \phi_i \cdot \nabla\psi_m \phi_j dx] = \mathbf{E}[\int_{D}f\psi_m \phi_j dx] \]
+\[\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i \mathbf{E}[\int_{D}a\nabla \psi_n \phi_i \cdot \nabla \psi_m \phi_j dx=\mathbf{E}[\int_{D}f\psi_m \phi_j dx] \]
+\[\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i \mathbf{E}[\psi_n \psi_m \int_{D}a\nabla \phi_i \cdot \nabla\phi_j dx] = \mathbf{E}[\psi_m \int_{D}f\phi_j dx] \]
+\[a(\omega,x)=\sum_{l=0}^{S}a_l(x)y_l(\omega) \]
+\[\sum_{l=0}^{S}\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i \mathbf{E}[y_l \psi_n \psi_m \int_{D}a_l \nabla \phi_i \cdot \nabla\phi_j dx] =\mathbf{E}[\psi_m \int_{D}f\phi_j dx] \]
+\[\sum_{l=0}^{S}\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i \mathbf{E}[y_l \psi_n \psi_m]\int_{D}a_l \nabla \phi_i \cdot \nabla\phi_j dx =\mathbf{E}[\psi_m \int_{D}f\phi_j dx]\]
+\[\sum_{l=0}^{S}\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i(G_l)_{nm}(K_l)_{ij} = (F_m)_j \]
+\[\sum_{l=0}^{S}\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i((G_l \otimes K_l)_{nm})_{ij} = (F_m)_j \]
+\[\sum_{l=0}^{S}(G_l \otimes K_l)U = F \]
+
+\end{document}
