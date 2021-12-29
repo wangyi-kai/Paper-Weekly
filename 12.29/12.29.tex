@@ -17,7 +17,7 @@
 \maketitle
 
 
-\section{DEFINITION IN SINGLE RANDOM VARIABLES}
+\section{Definition of Single Random Variable}
 Let $z$ be a random variable with a distribution function
 $F(z)=P(z \leq Z)$, The generalized polynomial chaos basis functions are the orthogonal polynomial functions satisfying
 \[\mathbf{E}[\Phi_m(z)\Phi_n(z)]=\gamma_n \delta_{nm}\]
@@ -66,5 +66,23 @@ prior to any computations.
 \[\sum_{l=0}^{S}\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i(G_l)_{nm}(K_l)_{ij} = (F_m)_j \]
 \[\sum_{l=0}^{S}\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i((G_l \otimes K_l)_{nm})_{ij} = (F_m)_j \]
 \[\sum_{l=0}^{S}(G_l \otimes K_l)U = F \]
+
+\[G_{lnm} = \mathbf{E}[y_l y_n y_m \]
+
+
+
+\[
+G_{lnm}=
+\left\{  
+\begin{array}{lr}  
+    \mathbf{E}[y]  &n = m = 0  \\
+    \mathbf{E}[y]^2 &  \textbf{one of} \ n,m=0 \ \textbf{and the other} \ \neq l\\
+    \mathbf{E}[y^2] & \textbf{one of} \ n,m=0 \ \textbf{and the other} \  = l  \\
+    \mathbf{E}[y]^{3} & n\neq m\neq l \neq n \\
+    \mathbf{E}[y^{2}]\mathbf{E}[y] & n,m,l\neq 0 \ \textbf{and exactly 2 are equal}, \\
+    \mathbf{E}[y^3] & n=m=l \\
+\end{array}  
+\right.  
+\]
 
 \end{document}
