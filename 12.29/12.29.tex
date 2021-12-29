@@ -16,9 +16,31 @@
 \begin{document}
 \maketitle
 
-\section{General Procedure}
 
-\subsection{Problem}
+\section{DEFINITION IN SINGLE RANDOM VARIABLES}
+Let $z$ be a random variable with a distribution function
+$F(z)=P(z \leq Z)$, The generalized polynomial chaos basis functions are the orthogonal polynomial functions satisfying
+\[\mathbf{E}[\Phi_m(z)\Phi_n(z)]=\gamma_n \delta_{nm}\]
+where 
+\[\gamma_n = \mathbf{E}[\Phi_{n}^{2}(z)] \]
+are the normalization factors.
+
+If $z$ is continuous, then its probability density function (PDF) exists such that $dF(z) = \rho(z)dz$ and the orthogonality can be written as
+ \[ \mathbf{E}[\Phi_m(z)\Phi_n(z)] = \int \Phi_m(z)\Phi_n(z) \rho(z)dz =\gamma_n \delta_{nm}\]
+Similarly, when $z$ is discrete, the orthogonality can be written as
+\[\mathbf{E}[\Phi_m(z)\Phi_n(z)]=\sum_{i}\Phi_m(z_i)\Phi_n(z_i)\rho_{i} \]
+\subsection{Hermite polynomial chaos}
+Let $z$ is a standard Gaussian random variable with zero mean and unit variance. Its PDF is
+\[\rho(z)=\frac{1}{\sqrt{2\pi}}e^{-z^{2}/2} \]
+we employ the Hermite polynomials as the basis functions,
+\[H_0(z)=1,\ H_1(z)=z,\ H_2(z)=z^{2}-1,\ H_3(z)=z^{3}-3z \]
+This is the classical Wiener-Hermite polynomial chaos basis.
+\subsection{Legendre polynomial chaos}
+
+%The seconde Part
+
+\section{General Procedure}
+\subsection{Stochastic diffusion equation}
 \[ -\nabla\cdot(a(\omega,x)\nabla u(\omega,x))=f(\omega,x)  \ (\omega,x)\in \Omega \times D\]
 \[u(\omega,x)= 0 \ x \in \partial D\]
 \subsection{Tensor Product}
@@ -31,6 +53,7 @@
 \[\sum_{i=1}^{N}U_i \int_{D}a\nabla \phi_i \cdot \nabla \phi_j dx = \int_{D}f\phi_j dx \]
 \[KU = F\]
 \[a(\omega,x) = \bar{a}+\sum_{l=1}^{\infty}\varphi_l(x)y_l(\omega) \]
+where the function $\varphi_l(x)$ are determined by the eigenvalues and eigenfunctions of the covariance function of $a(\omega,x)$, and $y_l(\omega)$ are mutually independent.
 \[u(\omega,x) = \sum_{n=1}^{Q}\sum_{i=1}^{N}(U_n)_{i}\psi_n(\omega)\phi_i(x) \]
 \[\mathbf{E}[\int_{D}a \nabla \sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i \psi_n \phi_i \cdot \nabla\psi_m \phi_j dx] = \mathbf{E}[\int_{D}f\psi_m \phi_j dx] \]
 \[\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i \mathbf{E}[\int_{D}a\nabla \psi_n \phi_i \cdot \nabla \psi_m \phi_j dx=\mathbf{E}[\int_{D}f\psi_m \phi_j dx] \]
@@ -38,6 +61,8 @@
 \[a(\omega,x)=\sum_{l=0}^{S}a_l(x)y_l(\omega) \]
 \[\sum_{l=0}^{S}\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i \mathbf{E}[y_l \psi_n \psi_m \int_{D}a_l \nabla \phi_i \cdot \nabla\phi_j dx] =\mathbf{E}[\psi_m \int_{D}f\phi_j dx] \]
 \[\sum_{l=0}^{S}\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i \mathbf{E}[y_l \psi_n \psi_m]\int_{D}a_l \nabla \phi_i \cdot \nabla\phi_j dx =\mathbf{E}[\psi_m \int_{D}f\phi_j dx]\]
+$\mathbf{E}[y_l \psi_n \psi_m]$ can pe can be evaluated
+prior to any computations.
 \[\sum_{l=0}^{S}\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i(G_l)_{nm}(K_l)_{ij} = (F_m)_j \]
 \[\sum_{l=0}^{S}\sum_{i=1}^{N}\sum_{n=1}^{Q}(U_n)_i((G_l \otimes K_l)_{nm})_{ij} = (F_m)_j \]
 \[\sum_{l=0}^{S}(G_l \otimes K_l)U = F \]
